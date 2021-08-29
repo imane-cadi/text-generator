@@ -1,32 +1,37 @@
 import fs from "fs";
 import path from "path";
 
-const words = ["كتاب", "مدرسة"];
-const procs = ["ب", "ك", "ل", "و", "ف"];
-const encs = ["ها", "هما", "هم", "هن", "ه"];
+const noms = readDocuments(['noms.txt']);
+const procsNom = readDocuments(['procsNom.txt']);
+const encsNom = readDocuments(['encsNom.txt']);
 
-function gene(words, procs, encs) {
+const verbs = readDocuments(['verbs.txt']);
+const procsVerb = readDocuments(['procsVerb.txt']);
+const encsVerb = readDocuments(['encsVerb.txt']);
+
+function gene(words, procs, encs, resultPath) {
   const result = [];
 
   words.forEach((word) => {
-    procs.forEach((item) => result.push(item + word));
+    procs.forEach((proc) => result.push(proc.trim() + word.trim()));
   });
 
   words.forEach((word) => {
-    encs.forEach((item) => result.push(word + item));
+    encs.forEach((enc) => result.push(word.trim().replace("ة", "ت") + enc.trim()));
   });
 
   words.forEach((word) => {
     encs.forEach((enc) => {
-      procs.forEach((proc) => result.push(proc + word + enc));
+      procs.forEach((proc) => result.push(proc.trim() + word.trim().replace("ة", "ت") + enc.trim()));
     });
   });
 
-  writeResults(["result.txt"], result);
+  writeResults(resultPath, result);
   console.log(result);
 }
 
-gene(words, procs, encs);
+gene(noms, procsNom, encsNom, ["resultNoms.txt"]);
+gene(verbs, procsVerb, encsVerb, ["resultVerbs.txt"]);
 
 function writeResults(filePath, data, gap = " ") {
   const documentsDataPath = path.join(process.cwd(), ...filePath);
@@ -34,3 +39,21 @@ function writeResults(filePath, data, gap = " ") {
   // const results = data.join("\n");
   fs.writeFileSync(documentsDataPath, results);
 }
+
+
+function readDocuments(filePath)  {
+  const documentsDataPath = path.join(process.cwd(), ...filePath);
+  
+  let data = fs
+    .readFileSync(documentsDataPath, {
+      encoding: "utf-8",
+    })
+    .trim()
+    .split("\r\n");
+    console.log(data)
+  return data;
+  
+}
+
+
+
