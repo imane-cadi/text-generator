@@ -1,0 +1,21 @@
+{
+  "name": "text-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imane-cadi/text-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imane-cadi/text-generator/issues"
+  },
+  "homepage": "https://github.com/imane-cadi/text-generator#readme"
+}
