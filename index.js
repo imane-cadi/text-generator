@@ -1,13 +1,13 @@
 import fs from "fs";
 import path from "path";
 
-const noms = readDocuments(['noms.txt']);
-const procsNom = readDocuments(['procsNom.txt']);
-const encsNom = readDocuments(['encsNom.txt']);
+const noms = readDocuments(["noms.txt"]);
+const procsNom = readDocuments(["procsNom.txt"]);
+const encsNom = readDocuments(["encsNom.txt"]);
 
-const verbs = readDocuments(['verbs.txt']);
-const procsVerb = readDocuments(['procsVerb.txt']);
-const encsVerb = readDocuments(['encsVerb.txt']);
+const verbs = readDocuments(["verbs.txt"]);
+const procsVerb = readDocuments(["procsVerb.txt"]);
+const encsVerb = readDocuments(["encsVerb.txt"]);
 
 function gene(words, procs, encs, resultPath) {
   const result = [];
@@ -17,17 +17,29 @@ function gene(words, procs, encs, resultPath) {
   });
 
   words.forEach((word) => {
-    encs.forEach((enc) => result.push(word.trim().replace("ة", "ت") + enc.trim()));
+    encs.forEach((enc) =>
+      result.push(word.trim().replace("ة", "ت") + enc.trim())
+    );
   });
 
   words.forEach((word) => {
     encs.forEach((enc) => {
-      procs.forEach((proc) => result.push(proc.trim() + word.trim().replace("ة", "ت") + enc.trim()));
+      procs.forEach((proc) =>
+        result.push(proc.trim() + word.trim().replace("ة", "ت") + enc.trim())
+      );
     });
   });
 
-  writeResults(resultPath, result);
-  console.log(result);
+  // remove duplication from result list
+  let resultWithNoDups = [];
+  result.forEach((word) => {
+    !resultWithNoDups.includes(word) && resultWithNoDups.push(word);
+  });
+
+  writeResults(resultPath, resultWithNoDups);
+  // console.log(result.length);
+  // console.log(resultWithNoDups.length);
+  // console.log(resultWithNoDups);
 }
 
 gene(noms, procsNom, encsNom, ["resultNoms.txt"]);
@@ -40,20 +52,15 @@ function writeResults(filePath, data, gap = " ") {
   fs.writeFileSync(documentsDataPath, results);
 }
 
-
-function readDocuments(filePath)  {
+function readDocuments(filePath) {
   const documentsDataPath = path.join(process.cwd(), ...filePath);
-  
+
   let data = fs
     .readFileSync(documentsDataPath, {
       encoding: "utf-8",
     })
     .trim()
     .split("\r\n");
-    console.log(data)
+  // console.log(data);
   return data;
-  
 }
-
-
-
